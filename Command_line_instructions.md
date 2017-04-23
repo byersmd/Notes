@@ -1,17 +1,17 @@
-#Command line instructions
+##Command line instructions
 
 
 **Git global setup**
 
 ''''
-git config --global user.name "Mark Byers"
+git config --global user.name "Mark Byers"  
 git config --global user.email "byersmarkd@gmail.com"
 '''''
 
 **Create a new repository**
 ''''
-git clone git@gitlab.com:byersmark/Notes.git
-cd Notes
+git clone git@gitlab.com:byersmark/Notes.git  
+cd Notes  
 touch README.md
 git add README.md
 git commit -m "add README"
