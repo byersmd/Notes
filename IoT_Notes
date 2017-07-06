@@ -1,0 +1,366 @@
+# IOT 110A/B - Internet of Things: Foundations Student Resource Repository #
+
+## Link to Adobe Connect Online 
+[Online Meeting Room](http://uweoconnect.extn.washington.edu/iot110/)
+
+## Setting up RPi3
+[RPi3 Setup](https://gitlab.com/iot110/iot110-student/blob/master/Resources/PI_SETUP.md)
+
+## Outline
+* [Lab 1](https://gitlab.com/iot110/iot110-student/blob/master/Labs/Lab1/setup.md) - Flask WebApp - Hello IoT World!
+* [Lab 2](https://gitlab.com/iot110/iot110-student/blob/master/Labs/Lab2/setup.md) - LEDs and Switches (GPIO) via Python
+* [Lab 3](https://gitlab.com/iot110/iot110-student/blob/master/Labs/Lab3/setup.md) - Server Sent Events and Bootstrap UI
+* [Lab 4](https://gitlab.com/iot110/iot110-student/blob/master/Labs/Lab4/setup.md) - Sensors: I2C Pressure/Temperature via the BMP280
+* [Lab 5](https://gitlab.com/iot110/iot110-student/blob/master/Labs/Lab5/setup.md) - Sensors: Thing Data Protocols/Webapp for the BMP280
+* [Lab 6](https://gitlab.com/iot110/iot110-student/blob/master/Labs/Lab6/setup.md) - Sensors: Thing Data Protocols/Webapp for the SenseHat
+* [Lab 7](https://gitlab.com/iot110/iot110-student/blob/master/Labs/Lab7/setup.md) - Actuators: PWM LED Dimmer Controller & Stepper Motor / via the TB6612
+* [Lab 8](https://gitlab.com/iot110/iot110-student/blob/master/Labs/Lab8/setup.md) - Basic Networking (Simple Gateway Edge Devices)
+* [Lab 9](https://gitlab.com/iot110/iot110-student/blob/master/Labs/Lab9/setup.md) - Collect to Cloud using MQTT
+
+## Webpage
+[UW-PCE IoT Website](https://www.pce.uw.edu/certificates/internet-of-things)
+
+
+## Lab Equipment List
+| ITEM #  | DESCRIPTION |  QTY  | COST | COMPONENT | BUY URL| OTHER |
+| :-----: | :---------- | :---: | ---: | :--------: | :-----------------| :-------- |
+| 1  | Raspberry Pi 3 Kit | 1 | $89.95 | [RaspberryPi3](https://www.raspberrypi.org/) | [Adafruit](https://www.adafruit.com/products/3058) |  [Alternate](https://www.amazon.com/dp/B01C6Q4GLE?psc=1) |      
+| 2  | Pi Sensor HAT    | 1 | $39.95 | Sensors | [Adafruit](https://www.adafruit.com/products/2738) | [Astro-Pi](https://astro-pi.org/) |
+| 3  | Barometric Pressure & Temperature Sensor | 1 | $9.95 | [BMP280](https://www.bosch-sensortec.com/bst/products/all_products/bmp280) | [Adafruit](https://www.adafruit.com/products/2651) | [AppNote](https://cdn-learn.adafruit.com/downloads/pdf/adafruit-bmp280-barometric-pressure-plus-temperature-sensor-breakout.pdf) | [Datasheet](https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf) |
+| 4  | Stepper Motor Breakout Board | 1 | $4.95 | [TB6612](http://toshiba.semicon-storage.com/ap-en/product/linear/motordriver/detail.TB6612FNG.html) | [Adafruit](https://www.adafruit.com/products/2448) | [AppNote](https://cdn-learn.adafruit.com/downloads/pdf/adafruit-tb6612-h-bridge-dc-stepper-motor-driver-breakout.pdf) | [Datasheet](http://toshiba.semicon-storage.com/ap-en/product/linear/motordriver/detail.TB6612FNG.html) |
+| 5  | NEMA 17 Stepper Motor| 1 | $14.00 | | [Adafruit ](https://www.adafruit.com/products/324) | |
+| 6  | Automotive Gauge Stepper Motor | 1| $9.95| | [AutoNeedle](https://www.adafruit.com/products/2424) | |
+| 7  | TFT 5 inch Monitor |	1 | $13.32 | | [Adafruit](https://www.adafruit.com/products/2232) | | |
+| 8  | HDMI Flat Cable | 1 | $11.29 | | [Adafruit](https://www.adafruit.com/products/2197) | |
+| 9  | Microsoft Keyboard | 1 | $59.95 | | [Amazon](http://amzn.to/2djI91K) |
+| 10 | Microsoft Wired Mouse | 1 | $3.95 | | [Amazon](http://amzn.to/2esKjlm) |
+| 11 | Micro USB Charge Sync GOLD Data Cable | 2 |	$9.98 |	| [Amazon](http://amzn.to/2e49OHk) |
+| 12 | Anker 24W Dual USB Wall Charger PowerPort 2 | 1 | $12.49 | | [Amazon](http://amzn.to/2ejevvC) |
+| 13 | STRAP BATT ECON 9V I STYLE 4"LD |	1 | $0.60 | | [Digikey](http://bit.ly/2gFinYM) |
+| 14 | Alkaline Battery Non-Rechargeable 9V | 2 | $4.76 | | [Digikey](http://bit.ly/2fLQYYl) |
+| 15 | HEX STANDOFF 4-40 NYLON 1/2" | 8 | $5.60 | | [Digikey](http://bit.ly/2iWFqOT) |
+| 16 | MACHINE SCREW PAN PHILLIPS 4-40 | 8 | $0.80 | | [Digikey](http://bit.ly/2iqhxlT) |
+| 17 | 2 Position Wire to Board Terminal Block | 1	| $0.57 | | [Digikey](http://bit.ly/2gMUtgG) |
+|    | | TOTAL | $292.06 | | |
+
+[IOT STUDENT HOME](https://gitlab.com/iot110/iot110-student/blob/master/README.md)
+
+## Setting up Lab1
+
+### Objectives
+For this lab we will be setting up a local web application running on the RPi
+that will act as our primary user interface in a *headless* mode (i.e. not
+requiring the HDMI graphic monitor connected to the RPi to interact with our
+sensor and actuator devices.  The scope of this lab will ensure that we are
+successful in connecting our networked RPi3 *Thing* controller, we are able to
+log into the device, connect its file system to our development host (via sshfs)
+and use the Atom editor to build our initial Python *Flask* Web Application.
+
+The various steps of this lab are summarized as:
+* Install Flask (lightweight Python Webserver)
+* Ensure that we have ssh keys installed and sshfs operating smoothly.
+* Build a Hello IoT WebApp using
+* Run the Webserver from RPi3
+* Test the Webserver from Browser and CLI
+
+### Step 1: Getting Flask
+```
+pi$ pip install flask
+
+```
+### Step 2: Ensure ssh keys and sshfs operating smoothly
+Secure shell (ssh) is the most universal and secure method to connect between
+two computers, to transfer files (via the scp command) and to mount a
+target's file system into the development host (via the sshfs command).
+
+### Step 3: Build a Hello IoT App
+Using the sshfs mounted folders and the Atom editor build the Flask demo
+Web Application ```hello.py```.  This application will reply with a
+simple HTML greeting page plus the hostname that was established during the
+setup phase:
+
+#### > Step 3a: Flask and socket
+``` python
+from flask import Flask
+import socket
+```
+
+#### > Step 3b: Obtaining RPi Hostname from Socket Library
+``` python
+## Get my machine hostname
+if socket.gethostname().find('.') >= 0:
+    hostname=socket.gethostname()
+else:
+    hostname=socket.gethostbyaddr(socket.gethostname())[0]
+```
+
+#### > Step 3c: Create the Flash Webserver app
+``` python
+app = Flask(__name__)
+```
+
+#### > Step 3d: Establish the default "route"
+``` python
+@app.route("/")
+def hello():
+    return "Hello IoT World from RPi3: " + hostname
+```
+
+#### > Step 3e: Code to run server on port 5000
+``` python
+## Run the website and make sure to make
+##  it externally visible with 0.0.0.0:5000 (default port)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
+```
+
+### Start the webserver and run the hello.py app
+
+```sh
+pi$ python hello.py
+ => runs the flask webserver from http://0.0.0.0, port 5000 for external access
+```
+
+### Test the hello.py WebApp from CLI and Remote Browser
+```
+pi$ curl http://0.0.0.0:5000
+Hello IoT World from RPi3 (hostname) : iot8e3c.iot!
+
+pi$ ifconfig | grep "inet addr"
+ => inet addr:**192.168.10.19**  Bcast:192.168.10.255  Mask:255.255.255.0
+
+host$ curl http://192.168.10.19:5000
+=> Hello IoT World from RPi3 (hostname) : iot8e3c.iot!
+
+host$ curl http://iot8e3c:5000
+=> Hello IoT World from RPi3 (hostname) : iot8e3c.iot!
+```
+
+![HelloIoT](https://gitlab.com/iot110/iot110-student/raw/master/Resources/Images/Hello-IoT_416x288.png)
+
+
+[IOT STUDENT HOME](https://gitlab.com/iot110/iot110-student/blob/master/README.md)
+
+[IOT STUDENT HOME](https://gitlab.com/iot110/iot110-student/blob/master/README.md)
+
+## Setting up Lab2
+
+### Objectives
+For this lab we will continue building on our IoT webapp by adding basic GPIO
+capability in a layered architectural manner.  We will build an object oriented
+Python ```gpio.py``` driver as well as a unit test ```gpio_test.py``` for the
+driver code.
+
+We will also build a simple introduction to API design that provides a hands-on
+approach to designing *HTTP get/post* methods within the Flask webserver
+framework.
+
+Next we'll build a simple ```index.html``` page that has three
+buttons for toggling the LED states as well as an indicator for the state of
+the switch.  This webpage will also have a small amount of Javascript (jQuery) to
+handle pushbutton events.
+
+
+The various steps of this lab are summarized as:
+* [PART A](https://gitlab.com/iot110/iot110-student/blob/master/Labs/Lab2/PartA.md) Design an object oriented Python GPIO driver and unit test.
+* [PART B](https://gitlab.com/iot110/iot110-student/blob/master/Labs/Lab2/PartB.md) Build a Flask webserver application that shows how to build HTTP GET/POST API.
+* [PART C](https://gitlab.com/iot110/iot110-student/blob/master/Labs/Lab2/PartC.md) Expand the API webserver design to interface to the GPIO module methods.
+* [PART D](https://gitlab.com/iot110/iot110-student/blob/master/Labs/Lab2/PartD.md) Build our GPIO IoT Webapp and show how to interface it as a template to Flask.
+* [PART E](https://gitlab.com/iot110/iot110-student/blob/master/Labs/Lab2/PartE.md) Code each of the Javascript events that need handling from button clicks
+* [PART F](https://gitlab.com/iot110/iot110-student/blob/master/Labs/Lab2/PartF.md) Fine tune the Javascript logic to handle startup conditions
+
+[LAB2 INDEX](https://gitlab.com/iot110/iot110-student/blob/master/Labs/Lab2/setup.md)
+
+### Part A - OO Python GPIO Driver ###
+**Synopsis:** A good architectural design starts with partitioning the system
+into components. One such component in our IoT system will be a GPIO interface
+driver for the 3 LEDs and one pushbutton switch we have defined. We will design
+methods for each of the actions and then a unit test to exercise each of these
+methods with the target hardware on our RPi breadboard.
+
+#### Step A1: Building a Simple GPIO Python Driver
+**Objective:** We'll design a simple object oriented Python module to handle I/O
+for our project.  Let's start by creating a file called ```gpio.py``` and
+importing libraries we will need for handling Raspberry PI GPIO.
+``` python
+import RPi.GPIO as GPIO
+```
+Next we will define each of the pins we will use for the LEDs and SWITCH.
+``` python
+LED1_PIN    = 18    # cobbler pin 12 (GPIO18)
+LED2_PIN    = 13    # cobbler pin 33 (GPIO13)
+LED3_PIN    = 23    # cobbler pin 16 (GPIO23)
+SWITCH_PIN  = 27    # cobbler pin 7  (GPIO27)
+```
+Next we'll declare the name of the class we will use to instantiate our GPIO
+object from our web server code.
+```python
+class PiGpio(object):
+    """Raspberry Pi Internet 'IoT GPIO'."""
+```
+We need to define what happens when we initialize the driver in an init method.
+``` python
+def __init__(self):
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(LED1_PIN, GPIO.OUT)      # RED LED as output
+    GPIO.setup(LED2_PIN, GPIO.OUT)      # GRN LED as output
+    GPIO.setup(LED3_PIN, GPIO.OUT)      # BLU LED as output
+    GPIO.setup(SWITCH_PIN, GPIO.IN)     # Switch as input w/pu
+    GPIO.setup(SWITCH_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+```
+
+Next we need a GPIO method to handle reading of the input switch pin. Notice
+that we will invert the logic of the pin due to the momentary switch circuit
+that grounds out the input upon pressing the switch down.
+``` python
+def read_switch(self):
+    """Read the switch state."""
+    switch = GPIO.input(SWITCH_PIN)
+    # invert because of active low momentary switch
+    if (switch == 0):
+        switch=1
+    else:
+        switch=0
+    return switch
+```
+
+And finally, we need ```getter``` and ```setter``` methods for the LED control
+for each of the 3 LEDs we have defined.
+``` python
+# set the particular LED to ON or OFF
+def set_led(self, led, value):
+    """Change the LED to the passed in value, '1 ON or '0' OFF."""
+    if(led == 1):
+        GPIO.output(LED1_PIN, value)
+    if(led == 2):
+        GPIO.output(LED2_PIN, value)
+    if(led == 3):
+        GPIO.output(LED3_PIN, value)
+
+# get the state of an LED
+def get_led(self, led):
+    """Return the state value of the LED, '1' ON or '0' OFF."""
+    if(led == 1):
+        return GPIO.input(LED1_PIN)
+    if(led == 2):
+        return GPIO.input(LED2_PIN)
+    if(led == 3):
+        return GPIO.input(LED3_PIN)
+```
+
+#### Step A2: GPIO Driver Unit Test
+**Objective:** In order to thoroughly test our ```gpio.py``` driver we need some
+low level unit test code that can be run from the command line shell as follows
+(along with its corresponding output):
+``` sh
+pi$ ./gpio_test.py
+
+============ Switch: 0 ============
+LED 1 ON (RED)
+LED1: 1
+LED2: 0
+LED3: 0
+
+LED 2 ON (GRN)
+LED1: 1
+LED2: 1
+LED3: 0
+
+LED 3 ON (BLU)
+LED1: 1
+LED2: 1
+LED3: 1
+
+LED 1 OFF (RED)
+LED1: 0
+LED2: 1
+LED3: 1
+
+LED 2 OFF (GRN)
+LED1: 0
+LED2: 0
+LED3: 1
+
+LED 3 OFF (BLU)
+LED1: 0
+LED2: 0
+LED3: 0
+```
+We will start by importing our GPIO driver and the time function we will need
+for some time delays.  Note also the inclusion of a "she-bang" which will be
+used to turn this file into an executable by telling the Linux shell where to
+find the Python program at ```/usr/bin/python```.
+
+```python
+#!/usr/bin/python
+import time
+from gpio import PiGpio
+```
+
+In order to test the driver, we will need to instantiate it.
+```python
+# create an instance of the pi gpio driver.
+pi_gpio= PiGpio()
+```
+
+Next we will simply run a forever while loop to test each of the methods
+```python
+# Blink the LEDS forever.
+print('Blinking all my LEDs in sequence (Ctrl-C to stop)...')
+while True:
+# Get the current switch state and print
+    switch = pi_gpio.read_switch()
+    print('\n============ Switch: {0} ============'.format(switch))
+
+    print('\nLED 1 ON (RED)')
+    pi_gpio.set_led(1,True)
+    print('LED1: {0}'.format(pi_gpio.get_led(1)))
+    print('LED2: {0}'.format(pi_gpio.get_led(2)))
+    print('LED3: {0}'.format(pi_gpio.get_led(3)))
+    time.sleep(1.0)
+
+    print('\nLED 2 ON (GRN)')
+    pi_gpio.set_led(2,True)
+    print('LED1: {0}'.format(pi_gpio.get_led(1)))
+    print('LED2: {0}'.format(pi_gpio.get_led(2)))
+    print('LED3: {0}'.format(pi_gpio.get_led(3)))
+    time.sleep(1.0)
+
+    print('\nLED 3 ON (BLU)')
+    pi_gpio.set_led(3,True)
+    print('LED1: {0}'.format(pi_gpio.get_led(1)))
+    print('LED2: {0}'.format(pi_gpio.get_led(2)))
+    print('LED3: {0}'.format(pi_gpio.get_led(3)))
+    time.sleep(1.0)
+
+
+    print('\nLED 1 OFF (RED)')
+    pi_gpio.set_led(1,False)
+    print('LED1: {0}'.format(pi_gpio.get_led(1)))
+    print('LED2: {0}'.format(pi_gpio.get_led(2)))
+    print('LED3: {0}'.format(pi_gpio.get_led(3)))
+    time.sleep(1.0)
+
+    print('\nLED 2 OFF (GRN)')
+    pi_gpio.set_led(2,False)
+    print('LED1: {0}'.format(pi_gpio.get_led(1)))
+    print('LED2: {0}'.format(pi_gpio.get_led(2)))
+    print('LED3: {0}'.format(pi_gpio.get_led(3)))
+    time.sleep(1.0)
+
+    print('\nLED 3 OFF (BLU)')
+    pi_gpio.set_led(3,False)
+    print('LED1: {0}'.format(pi_gpio.get_led(1)))
+    print('LED2: {0}'.format(pi_gpio.get_led(2)))
+    print('LED3: {0}'.format(pi_gpio.get_led(3)))
+    time.sleep(1.0)
+```
+In order to run this unit test from the command line it will need to be made
+executable.
+```sh
+pi$ chmod +x gpio_test.py
+```
+Then it can be run using the "./" method of execution from the command line.
+
+[LAB2 INDEX](https://gitlab.com/iot110/iot110-student/blob/master/Labs/Lab2/setup.md)
